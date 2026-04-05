@@ -18,12 +18,6 @@
         "state": "Open"
     },
     {
-        "id": "7721bc",
-        "issue": "Printer in Room 302 is jammed",
-        "priority": "Medium",
-        "state": "Resolved"
-    },
-    {
         "id": "2555d8",
         "issue": "Test",
         "priority": "High",
