@@ -5,42 +5,39 @@ import json
 
 @function_tool
 def create_record(issue: str, priority: str = "Medium") -> str:
-    """Create a new support ticket. Use this when the user wants to 'add', 'create', or 'new'."""
+    """Create a new ticket. Use for: 'add', 'new', 'create'."""
     tickets = db.read_tickets()
     new_id = str(uuid.uuid4())[:6]
-    new_entry = {"id": new_id, "issue": issue, "priority": priority, "state": "Open"}
-    tickets.append(new_entry)
+    tickets.append({"id": new_id, "issue": issue, "priority": priority, "state": "Open"})
     db.save_tickets(tickets)
-    return f"SUCCESS: Created ticket {new_id} for '{issue}'."
+    return f"Created ticket {new_id}."
 
 @function_tool
 def list_records() -> str:
-    """Show all tickets. Use this when the user says 'show', 'list', or 'view'."""
-    tickets = db.read_tickets()
-    if not tickets: return "The database is currently empty."
-    return json.dumps(tickets, indent=2)
+    """List all tickets. Use for: 'show', 'view', 'list'."""
+    return json.dumps(db.read_tickets(), indent=2)
 
 @function_tool
-def update_record(ticket_id: str, new_status: str) -> str:
-    """Change the status of a ticket. Use this for 'update', 'fix', or 'resolve'."""
+def manage_tickets_by_state(action: str, target_state: str, new_state: str = None) -> str:
+    """
+    Batch actions on tickets. 
+    Action: 'delete' or 'update'. 
+    Target_state: e.g. 'Resolved', 'Open'.
+    """
     tickets = db.read_tickets()
-    found = False
-    for t in tickets:
-        if t["id"] == ticket_id:
-            t["state"] = new_status
-            found = True
-            break
-    if not found:
-        return f"ERROR: Ticket {ticket_id} not found."
-    db.save_tickets(tickets)
-    return f"SUCCESS: Ticket {ticket_id} updated to {new_status}."
-
-@function_tool
-def delete_record(ticket_id: str) -> str:
-    """Delete a ticket. Use this for 'delete', 'remove', or 'cancel'."""
-    tickets = db.read_tickets()
-    updated = [t for t in tickets if t["id"] != ticket_id]
-    if len(tickets) == len(updated):
-        return f"ERROR: Ticket {ticket_id} not found."
-    db.save_tickets(updated)
-    return f"SUCCESS: Deleted ticket {ticket_id}."
+    initial_len = len(tickets)
+    
+    if action == "delete":
+        updated = [t for t in tickets if t["state"].lower() != target_state.lower()]
+        db.save_tickets(updated)
+        return f"Deleted {initial_len - len(updated)} tickets."
+    
+    if action == "update" and new_state:
+        count = 0
+        for t in tickets:
+            if t["state"].lower() == target_state.lower():
+                t["state"] = new_state
+                count += 1
+        db.save_tickets(tickets)
+        return f"Updated {count} tickets to {new_state}."
+    return "No changes made."
