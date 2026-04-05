@@ -1,10 +1,11 @@
-from agents import Agent, ModelSettings
+from agents import Agent, ModelSettings,WebSearchTool
 from tools import create_record, list_records, manage_tickets_by_state
 from models import AgentResponse
 
 def setup_workforce(model):
     # Temperature 0.0 prevents the AI from 'hallucinating' data
     settings = ModelSettings(max_tokens=1000, temperature=0.0)
+    web_search = WebSearchTool()
 
     clerk = Agent(
         name="database_clerk",
@@ -15,6 +16,12 @@ def setup_workforce(model):
         tools=[create_record, list_records, manage_tickets_by_state],
         model=model,
         model_settings=settings
+    )
+    researcher = Agent(
+        name="web_researcher",
+        instructions="Search the web for the latest news or technical documentation.",
+        tools=[web_search], # 2. Give the tool to the agent
+        model=model
     )
 
     manager = Agent(

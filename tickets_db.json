@@ -28,5 +28,35 @@
         "issue": "Poko",
         "priority": "low",
         "state": "Open"
+    },
+    {
+        "id": "9cf10c",
+        "issue": "Review latest Python 3.14 features",
+        "priority": "High",
+        "state": "Open"
+    },
+    {
+        "id": "2d4daa",
+        "issue": "npm axios recent hack issue - Description: Investigate security vulnerability in recent npm axios package version, potential data leakage risk",
+        "priority": "High",
+        "state": "Open"
+    },
+    {
+        "id": "47f106",
+        "issue": "The recent incident involved a security vulnerability in the Claude codebase interacting with the Axios npm package, leading to unauthorized data access. The issue was first reported on 2023-10-15 after users noticed unusual API requests. Further investigation revealed that an outdated Axios version (v1.3.2) was susceptible to a prototype pollution exploit, which allowed attackers to inject malicious payloads. The incident has been escalated for immediate patching.",
+        "priority": "High",
+        "state": "Open"
+    },
+    {
+        "id": "38e57c",
+        "issue": "apple stock price of 05.04.2026",
+        "priority": "Medium",
+        "state": "Open"
+    },
+    {
+        "id": "d92577",
+        "issue": "Describe the features of the latest Python version",
+        "priority": "Medium",
+        "state": "Open"
     }
 ]
